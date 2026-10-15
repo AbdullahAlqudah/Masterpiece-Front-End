@@ -1,0 +1,17 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cart · Khadra</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/global.css"></head>
+<body data-root="" data-page="shop"><div id="site-nav"></div><main class="section"><div class="container">
+<div class="head"><h2>Your cart</h2></div><div id="cart"></div></div></main><div id="site-footer"></div>
+<script src="assets/js/storage.js"></script><script src="assets/js/mock-data.js"></script><script src="assets/js/cart.js"></script><script src="assets/js/main.js"></script>
+<script>document.addEventListener('page:ready',function(){
+ const el=document.getElementById('cart');
+ const draw=()=>{const it=Cart.items();if(!it.length){el.innerHTML='<div class="empty"><i class="bi bi-bag"></i><p>Your cart is empty.</p><a class="btn" style="margin-top:16px" href="shop.html">Browse the shop</a></div>';return}
+  el.innerHTML='<div class="table-wrap"><table><thead><tr><th>Product</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th></th></tr></thead><tbody>'+it.map(x=>{const p=PRODUCTS.find(p=>p.id===x.id);
+  return `<tr><td>${p.name}</td><td>$${p.price}</td><td><div class="qty"><button data-q="${x.id}:-1" aria-label="Decrease">−</button><span>${x.qty}</span><button data-q="${x.id}:1" aria-label="Increase">+</button></div></td><td>$${p.price*x.qty}</td><td><button class="icon-btn" data-rm="${x.id}" aria-label="Remove ${p.name}"><i class="bi bi-trash"></i></button></td></tr>`}).join('')+
+  `</tbody></table></div><div style="text-align:end;margin-top:24px"><p class="price" style="font-size:1.5rem">Total: $${Cart.total()}</p><a class="btn" href="checkout.html" style="margin-top:12px" id="co">Checkout</a></div>`;
+  document.getElementById('co').onclick=e=>{e.preventDefault();toast('Checkout page is coming in the next phase')}};
+ el.addEventListener('click',e=>{const q=e.target.closest('[data-q]'),r=e.target.closest('[data-rm]');
+  if(q){const a=q.dataset.q.split(':').map(Number);Cart.setQty(a[0],Cart.items().find(x=>x.id===a[0]).qty+a[1])}if(r){Cart.remove(+r.dataset.rm);toast('Item removed')}});
+ document.addEventListener('cart:change',draw);draw()})</script></body></html>

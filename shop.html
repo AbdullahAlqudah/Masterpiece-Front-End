@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Shop · Khadra</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/variables.css"><link rel="stylesheet" href="assets/css/global.css"></head>
+<body data-root="" data-page="shop"><div id="site-nav"></div><main class="section"><div class="container">
+<div class="head"><h2>Shop</h2><p class="lead">Trees, soil, tools and indoor plants.</p></div>
+<div class="toolbar"><input type="search" id="q" placeholder="Search products" aria-label="Search products"><select id="cat" aria-label="Category"><option value="">All categories</option></select>
+<select id="sort" aria-label="Sort"><option value="">Sort: featured</option><option value="asc">Price: low to high</option><option value="desc">Price: high to low</option></select></div>
+<div class="grid" id="list"></div></div></main><div id="site-footer"></div>
+<script src="assets/js/storage.js"></script><script src="assets/js/mock-data.js"></script><script src="assets/js/cart.js"></script><script src="assets/js/main.js"></script>
+<script>document.addEventListener('page:ready',function(){
+ const $=id=>document.getElementById(id);$('cat').innerHTML+=[...new Set(PRODUCTS.map(p=>p.cat))].map(c=>`<option>${c}</option>`).join('');
+ const draw=()=>{let r=PRODUCTS.filter(p=>p.name.toLowerCase().includes($('q').value.toLowerCase())&&(!$('cat').value||p.cat===$('cat').value));
+  if($('sort').value)r.sort((a,b)=>$('sort').value==='asc'?a.price-b.price:b.price-a.price);
+  $('list').innerHTML=r.length?r.map(productCard).join(''):'<div class="empty"><i class="bi bi-search"></i><p>No products match. Try a different search or category.</p></div>';loadImages()};
+ ['q','cat','sort'].forEach(i=>$(i).addEventListener('input',draw));draw()})</script></body></html>
